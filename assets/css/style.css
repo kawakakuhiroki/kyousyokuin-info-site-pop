@@ -3,7 +3,7 @@
   --navy-800: #203566;
   --navy-700: #2d4b8a;
   --sky-100: #e9f4ff;
-  --sky-50: #f5fbff;
+  --sky-50: #f6fbff;
   --mint: #35d1c0;
   --pink: #ff8fb1;
   --peach: #ffd5b5;
@@ -29,7 +29,10 @@ body {
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", sans-serif;
   color: var(--text);
-  background: linear-gradient(180deg, var(--sky-50) 0%, #ffffff 55%, var(--sky-100) 100%);
+  background:
+    radial-gradient(180px 140px at 8% 10%, rgba(255, 209, 102, 0.35), transparent 60%),
+    radial-gradient(220px 160px at 92% 12%, rgba(255, 143, 177, 0.35), transparent 65%),
+    linear-gradient(180deg, var(--sky-50) 0%, #ffffff 50%, var(--sky-100) 100%);
   line-height: 1.75;
 }
 
@@ -111,12 +114,13 @@ img {
 .global-nav a {
   padding: 8px 14px;
   border-radius: 999px;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .global-nav a:hover {
   background: var(--sky-100);
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
 .global-nav a:focus-visible,
@@ -133,31 +137,37 @@ img {
 }
 
 .hero {
-  padding: 68px 0 56px;
+  padding: 72px 0 60px;
   background: linear-gradient(130deg, #23406f 0%, #4aa3ff 55%, #7fdfff 100%);
   color: var(--white);
   position: relative;
   overflow: hidden;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
-  right: -220px;
-  top: -240px;
-}
-
+.hero::before,
 .hero::after {
   content: "";
   position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+
+.hero::before {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  right: -160px;
+  top: -200px;
+  animation: floaty 12s ease-in-out infinite;
+}
+
+.hero::after {
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.6), transparent 70%);
   left: -120px;
   bottom: -120px;
+  animation: floaty 10s ease-in-out infinite reverse;
 }
 
 .hero-inner {
@@ -169,9 +179,23 @@ img {
   z-index: 1;
 }
 
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  animation: shimmer 3.4s ease-in-out infinite;
+}
+
 .hero h1 {
   font-size: clamp(2rem, 3vw, 3rem);
   margin: 0 0 18px;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
 .hero p {
@@ -179,23 +203,12 @@ img {
   color: #e1f2ff;
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  padding: 6px 16px;
-  font-size: 0.85rem;
-  margin-bottom: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
 .hero-visual {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: var(--radius);
   padding: 24px;
-  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  animation: floaty 9s ease-in-out infinite;
 }
 
 .hero-visual ul {
@@ -204,7 +217,7 @@ img {
 }
 
 .section {
-  padding: 62px 0;
+  padding: 64px 0;
 }
 
 .section-title {
@@ -236,6 +249,13 @@ img {
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow);
+  transform: translateY(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 42px rgba(32, 53, 102, 0.2);
 }
 
 .card h3 {
@@ -283,11 +303,12 @@ dd {
 }
 
 .list-check li::before {
-  content: "●";
-  color: var(--pink);
+  content: "★";
+  color: var(--sun);
   position: absolute;
   left: 0;
   top: 0;
+  animation: sparkle 2.8s ease-in-out infinite;
 }
 
 .split {
@@ -310,14 +331,32 @@ dd {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 12px 22px;
   border-radius: 999px;
   border: 2px solid var(--navy-800);
   background: var(--navy-800);
   color: var(--white);
   font-weight: 700;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 80%;
+  height: 180%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+}
+
+.button:hover::after {
+  transform: translateX(140%);
 }
 
 .button.outline {
@@ -339,7 +378,20 @@ dd {
   display: grid;
   gap: 18px;
   align-items: center;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-band::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
+  right: -60px;
+  bottom: -60px;
+  animation: floaty 10s ease-in-out infinite;
 }
 
 .cta-band h2 {
@@ -385,6 +437,11 @@ dd {
   background: var(--white);
   display: grid;
   gap: 6px;
+  transition: transform 0.2s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-4px);
 }
 
 .news-item time {
@@ -459,6 +516,38 @@ textarea {
   color: #a7bdd8;
 }
 
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
 @media (max-width: 920px) {
   .global-nav {
     display: none;
@@ -496,7 +585,7 @@ textarea {
 
 @media (max-width: 700px) {
   .hero {
-    padding: 52px 0 40px;
+    padding: 56px 0 42px;
   }
 
   .cta-band {
